@@ -1,0 +1,56 @@
+# 0-the_sky_is_the_limit_not.pp
+
+For this task , run these commands:
+
+1. lsb_realese -a :
+
+-  to show the version of ubuntu. In this case we are supposed to work our debugging tasks on Ubuntu 14.04.6 LTS.
+
+2. sudo apt-get update:
+
+- to get the latest update
+
+3. sudo apt-get install apache2-utils :
+
+- Installs Apache2 Utilities package with various useful tools for managing Apache HTTP server.
+
+4. sudo vim /etc/default/nginx:
+
+- Opens the Nginx configuration file in the Vim text editor with root permissions, allowing you to modify Nginx settings. 
+- Do not change anything in the default, run the puppet script first:  [puppet apply 0-the_sky_is_the_limit_not.pp] and it will change automatically
+
+Puppet script for task 0:
+
+# Fix nginx to accept and serve more requests
+
+exec {'modify max open files limit setting':
+  command => 'sed -i "s/15/10000/" /etc/default/nginx && sudo service nginx restart',
+  path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
+}
+
+# 1-user_limit.pp
+
+1. vi /etc/security/limits.conf:
+
+- Opens the limits.conf file for editing using the Vi text editor.
+- This file is used to set resource limits and controls for users and groups on a Linux system, including limits on CPU time, memory usage, and file access.
+- Note: Do not change or edit in this file as requires root (sudo) privileges. 
+
+Puppet script for Task 1:
+
+# Enable the user holberton to login and open files without error.
+
+# Increase hard file limit for Holberton user.
+exec { 'increase-hard-file-limit-for-holberton-user':
+  command => 'sed -i "/holberton hard/s/5/50000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin/:/bin/'
+}
+
+# Increase soft file limit for Holberton user.
+exec { 'increase-soft-file-limit-for-holberton-user':
+  command => 'sed -i "/holberton soft/s/4/50000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin/:/bin/'
+}
+
+2. Run : [puppet apply 1-user_limit.pp] to execute you script and make changes.
+3. Run : [su - holberton] to log in as holberton.
